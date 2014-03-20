@@ -1,0 +1,228 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Q by benhutchins</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Q</h1>
+        <p>Extremely simple non-intrusive native DOM helper.</p>
+
+        <p class="view"><a href="https://github.com/benhutchins/Q">View the Project on GitHub <small>benhutchins/Q</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/benhutchins/Q/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/benhutchins/Q/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/benhutchins/Q">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a name="q" class="anchor" href="#q"><span class="octicon octicon-link"></span></a>Q</h1>
+
+<p>Extremely simple non-intrusive native DOM helper. For those who don't need jQuery but need quick development.</p>
+
+<p>Q provides an alternative to libraries like <a href="http://jquery.com">jQuery</a> and <a href="http://mootools.net">Mootools</a> that is simple to use and doesn't bloat your namespace or attempt to deal with the "finer points" of web development.</p>
+
+<h2>
+<a name="how-to-use" class="anchor" href="#how-to-use"><span class="octicon octicon-link"></span></a>How to use</h2>
+
+<p>The <code>Q</code> method returns a native Element object. It does not override any native methods</p>
+
+<h3>
+<a name="create-an-element" class="anchor" href="#create-an-element"><span class="octicon octicon-link"></span></a>Create an element</h3>
+
+<p>To create a new element by type (essentially a wrapper for <code>document.createElement</code>):</p>
+
+<pre><code>var el = Q('div');
+</code></pre>
+
+<p>To wrap an element you already have with the Q utilities:</p>
+
+<pre><code>var el = Q(document.body);
+</code></pre>
+
+<p>To perform a selector for a single element:</p>
+
+<pre><code>var el = Q('#')
+</code></pre>
+
+<p>To create an empty <code>div</code> element, simply do:</p>
+
+<pre><code>var el = Q();
+</code></pre>
+
+<h3>
+<a name="css" class="anchor" href="#css"><span class="octicon octicon-link"></span></a>.css</h3>
+
+<p>A utility to set CSS styling properties.</p>
+
+<pre><code>.css('margin', 'none');
+</code></pre>
+
+<p>Or to set multiple CSS styling properties at once.</p>
+
+<pre><code>.css({
+    margin: 'none',
+    paddingLeft: '10px'
+});
+</code></pre>
+
+<h3>
+<a name="set" class="anchor" href="#set"><span class="octicon octicon-link"></span></a>.set</h3>
+
+<p>Set an attribute property value. See Special Properties below.</p>
+
+<pre><code>.set('id', 'something');
+</code></pre>
+
+<p>Or to set multiple attributes at once.</p>
+
+<pre><code>.set({
+    id: 'something',
+    href: 'http://github.com/',
+    text: 'Github'
+})
+</code></pre>
+
+<h3>
+<a name="get" class="anchor" href="#get"><span class="octicon octicon-link"></span></a>.get</h3>
+
+<p>Get an attribute property value. See Special Properties below.</p>
+
+<pre><code>.get('id');
+</code></pre>
+
+<h3>
+<a name="on" class="anchor" href="#on"><span class="octicon octicon-link"></span></a>.on</h3>
+
+<p>Add an event listener.</p>
+
+<pre><code>.on('click', clickEventCallback);
+</code></pre>
+
+<p>Or to add multiple events at one.</p>
+
+<pre><code>.on({
+    mousedown: function(){},
+    mouseup: function(){}
+});
+</code></pre>
+
+<h3>
+<a name="off" class="anchor" href="#off"><span class="octicon octicon-link"></span></a>.off</h3>
+
+<p>Remove an event listener.</p>
+
+<pre><code>.off('click', clickEventCallback);
+</code></pre>
+
+<p>Or to remove multiple events at one.</p>
+
+<pre><code>.off({
+    mousedown: onMouseDownCallback,
+    mouseup: onMouseUpCallback
+});
+</code></pre>
+
+<h3>
+<a name="adopt" class="anchor" href="#adopt"><span class="octicon octicon-link"></span></a>.adopt</h3>
+
+<p>To append descendant elements.</p>
+
+<pre><code>.adopt(document.createElement('div'));
+</code></pre>
+
+<p>You can also append a Q element directly.</p>
+
+<pre><code>.adopt(Q('div'))
+</code></pre>
+
+<p>You can also append a list of elements.</p>
+
+<pre><code>.adopt([Q(), Q(), Q()]);
+</code></pre>
+
+<p>Or you can pass the list directly as arguments.</p>
+
+<pre><code>.adopt(Q(), Q(), Q());
+</code></pre>
+
+<h2>
+<a name="special-properties" class="anchor" href="#special-properties"><span class="octicon octicon-link"></span></a>Special Properties</h2>
+
+<h3>
+<a name="text" class="anchor" href="#text"><span class="octicon octicon-link"></span></a>text</h3>
+
+<p>To insert text content.</p>
+
+<pre><code>.set('text', 'Text safe, this string will be HTML-escaped. &lt;a href=""&gt;&lt;/a&gt;');
+</code></pre>
+
+<p>To get the text content for a node.</p>
+
+<pre><code>.get('text');
+</code></pre>
+
+<h3>
+<a name="html" class="anchor" href="#html"><span class="octicon octicon-link"></span></a>html</h3>
+
+<p>To set the raw inner HTML value of the element.</p>
+
+<pre><code>.set('html', 'HTML stuff, like &lt;a href=""&gt;&lt;/a&gt;');
+</code></pre>
+
+<p>To get the inner HTML value of an element.</p>
+
+<pre><code>.get('html');
+</code></pre>
+
+<h3>
+<a name="add-custom-special-property" class="anchor" href="#add-custom-special-property"><span class="octicon octicon-link"></span></a>Add custom special property</h3>
+
+<p>There is a special object <code>Q.properties</code> which is an object of special property keywords. The value of these is an object containing a <code>set</code> and <code>get</code> function. To add a custom special property.</p>
+
+<pre><code>Q.properties.width = {
+    set: function (value) {
+        // 'this' will be the element
+        this.css('width', value + 'px');
+    },
+
+    get: function () {
+        return this.clientWidth;
+    }
+};
+</code></pre>
+
+<p>This is extremely extensible.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/benhutchins">benhutchins</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-49219744-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
