@@ -103,6 +103,18 @@ Or you can pass the list directly as arguments.
 
 	.adopt(Q(), Q(), Q());
 
+## Special Methods
+
+To add custom methods to each Q return element, there is a utility similar to jQuery's `$.fn`.
+
+	Q.fn.method = function () {
+		// this will be a single element
+	};
+
+Now to call your method, simply:
+
+	.method();
+
 ## Special Properties
 
 ### text
