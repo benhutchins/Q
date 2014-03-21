@@ -71,7 +71,7 @@ Add multiple classes to the element.
 	.addClass('one', 'two'); // with arguments
 	.addClass('one two'); // with whitespace
 
-##### .hasClass(class)
+#### .hasClass(class)
 
 Returns a boolean to indicate whether the element has the given class.
 
@@ -83,7 +83,7 @@ Returns a boolean to indicate whether the element has all the given classes.
 	.hasClass('one', 'two');
 	.hsaClass('one two');
 
-##### .removeClass(class)
+#### .removeClass(class)
 
 Remove a class from the element.
 
