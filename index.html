@@ -38,33 +38,44 @@
 <h2>
 <a name="how-to-use" class="anchor" href="#how-to-use"><span class="octicon octicon-link"></span></a>How to use</h2>
 
-<p>The <code>Q</code> method returns a native Element object. It does not override any native methods</p>
+<p>The <code>Q</code> method returns a native Element object. It does not override any native methods. This makes it useful when interacting with the native DOM API. It also allows Q to be used alongside essentially any other framework.</p>
 
 <h3>
 <a name="create-an-element" class="anchor" href="#create-an-element"><span class="octicon octicon-link"></span></a>Create an element</h3>
 
 <p>To create a new element by type (essentially a wrapper for <code>document.createElement</code>):</p>
 
-<pre><code>var el = Q('div');
+<pre><code>var el = Q('&lt;div&gt;');
 </code></pre>
 
-<p>To wrap an element you already have with the Q utilities:</p>
+<p>To wrap an element you already have with Q.</p>
 
 <pre><code>var el = Q(document.body);
 </code></pre>
 
-<p>To perform a selector for a single element:</p>
-
-<pre><code>var el = Q('#')
-</code></pre>
-
-<p>To create an empty <code>div</code> element, simply do:</p>
+<p>By default, Q will return a new empty <code>div</code> element.</p>
 
 <pre><code>var el = Q();
 </code></pre>
 
 <h3>
-<a name="css" class="anchor" href="#css"><span class="octicon octicon-link"></span></a>.css</h3>
+<a name="find-an-element" class="anchor" href="#find-an-element"><span class="octicon octicon-link"></span></a>Find an element</h3>
+
+<p>To perform a selector for a single element:</p>
+
+<pre><code>var el = Q(selector);
+</code></pre>
+
+<p>To find a list of elements that match a given selector:</p>
+
+<pre><code>var els = Q(document.body).search(selector);
+</code></pre>
+
+<h3>
+<a name="css-and-styling-manipulation" class="anchor" href="#css-and-styling-manipulation"><span class="octicon octicon-link"></span></a>CSS and styling manipulation</h3>
+
+<h4>
+<a name="cssproperty-value" class="anchor" href="#cssproperty-value"><span class="octicon octicon-link"></span></a>.css(property, value)</h4>
 
 <p>A utility to set CSS styling properties.</p>
 
@@ -80,14 +91,92 @@
 </code></pre>
 
 <h3>
-<a name="set" class="anchor" href="#set"><span class="octicon octicon-link"></span></a>.set</h3>
+<a name="cssproperty" class="anchor" href="#cssproperty"><span class="octicon octicon-link"></span></a>.css(property)</h3>
 
-<p>Set an attribute property value. See Special Properties below.</p>
+<p>Return the computed style for the requested property.</p>
+
+<h4>
+<a name="hide" class="anchor" href="#hide"><span class="octicon octicon-link"></span></a>.hide()</h4>
+
+<p>Set the <code>display</code> CSS property to <code>none</code> to render the the element hidden.</p>
+
+<h4>
+<a name="show" class="anchor" href="#show"><span class="octicon octicon-link"></span></a>.show()</h4>
+
+<p>Reset the <code>display</code> CSS property of the element to the element's default state.</p>
+
+<h4>
+<a name="addclassclass" class="anchor" href="#addclassclass"><span class="octicon octicon-link"></span></a>.addClass(class)</h4>
+
+<p>Add a class to the element.</p>
+
+<pre><code>.addClass('example');
+</code></pre>
+
+<p>Add multiple classes to the element.</p>
+
+<pre><code>.addClsas(['one', 'two']); // with an array
+.addClass('one', 'two'); // with arguments
+.addClass('one two'); // with whitespace
+</code></pre>
+
+<h4>
+<a name="hasclassclass" class="anchor" href="#hasclassclass"><span class="octicon octicon-link"></span></a>.hasClass(class)</h4>
+
+<p>Returns a boolean to indicate whether the element has the given class.</p>
+
+<pre><code>.hasClass('example');
+</code></pre>
+
+<p>Returns a boolean to indicate whether the element has all the given classes.</p>
+
+<pre><code>.hasClass(['one', 'two']);
+.hasClass('one', 'two');
+.hsaClass('one two');
+</code></pre>
+
+<h4>
+<a name="removeclassclass" class="anchor" href="#removeclassclass"><span class="octicon octicon-link"></span></a>.removeClass(class)</h4>
+
+<p>Remove a class from the element.</p>
+
+<pre><code>.removeClass('example');
+</code></pre>
+
+<p>Remove multiple classes from the element.</p>
+
+<pre><code>.removeClass(['one', 'two']); // with an array
+.removeClass('one', 'two'); // with arguments
+.removeClass('one two'); // with whitespace
+</code></pre>
+
+<h4>
+<a name="toggleclassclass" class="anchor" href="#toggleclassclass"><span class="octicon octicon-link"></span></a>.toggleClass(class)</h4>
+
+<p>Add or remove class from the element, depending on whether the element already has the given class.</p>
+
+<pre><code>.toggleClass(class);
+</code></pre>
+
+<p>Add or remove multiple classes from the element, depending on whether the element already has the given class.</p>
+
+<pre><code>.toggleClass(['one', 'two']); // with an array 
+.toggleClass('one', 'two'); // with arguments
+.toggleClass('one two'); // with whitespace
+</code></pre>
+
+<h3>
+<a name="element-attributes-and-properties" class="anchor" href="#element-attributes-and-properties"><span class="octicon octicon-link"></span></a>Element attributes and properties</h3>
+
+<h4>
+<a name="set" class="anchor" href="#set"><span class="octicon octicon-link"></span></a>.set</h4>
+
+<p>Set an attribute value.</p>
 
 <pre><code>.set('id', 'something');
 </code></pre>
 
-<p>Or to set multiple attributes at once.</p>
+<p>Set multiple attributes.</p>
 
 <pre><code>.set({
     id: 'something',
@@ -96,74 +185,19 @@
 })
 </code></pre>
 
-<h3>
-<a name="get" class="anchor" href="#get"><span class="octicon octicon-link"></span></a>.get</h3>
+<h4>
+<a name="get" class="anchor" href="#get"><span class="octicon octicon-link"></span></a>.get</h4>
 
-<p>Get an attribute property value. See Special Properties below.</p>
+<p>Get an attribute value.</p>
 
 <pre><code>.get('id');
 </code></pre>
 
-<h3>
-<a name="on" class="anchor" href="#on"><span class="octicon octicon-link"></span></a>.on</h3>
+<h4>
+<a name="special-properties" class="anchor" href="#special-properties"><span class="octicon octicon-link"></span></a>Special properties</h4>
 
-<p>Add an event listener.</p>
-
-<pre><code>.on('click', clickEventCallback);
-</code></pre>
-
-<p>Or to add multiple events at one.</p>
-
-<pre><code>.on({
-    mousedown: function(){},
-    mouseup: function(){}
-});
-</code></pre>
-
-<h3>
-<a name="off" class="anchor" href="#off"><span class="octicon octicon-link"></span></a>.off</h3>
-
-<p>Remove an event listener.</p>
-
-<pre><code>.off('click', clickEventCallback);
-</code></pre>
-
-<p>Or to remove multiple events at one.</p>
-
-<pre><code>.off({
-    mousedown: onMouseDownCallback,
-    mouseup: onMouseUpCallback
-});
-</code></pre>
-
-<h3>
-<a name="adopt" class="anchor" href="#adopt"><span class="octicon octicon-link"></span></a>.adopt</h3>
-
-<p>To append descendant elements.</p>
-
-<pre><code>.adopt(document.createElement('div'));
-</code></pre>
-
-<p>You can also append a Q element directly.</p>
-
-<pre><code>.adopt(Q('div'))
-</code></pre>
-
-<p>You can also append a list of elements.</p>
-
-<pre><code>.adopt([Q(), Q(), Q()]);
-</code></pre>
-
-<p>Or you can pass the list directly as arguments.</p>
-
-<pre><code>.adopt(Q(), Q(), Q());
-</code></pre>
-
-<h2>
-<a name="special-properties" class="anchor" href="#special-properties"><span class="octicon octicon-link"></span></a>Special Properties</h2>
-
-<h3>
-<a name="text" class="anchor" href="#text"><span class="octicon octicon-link"></span></a>text</h3>
+<h5>
+<a name="text" class="anchor" href="#text"><span class="octicon octicon-link"></span></a>text</h5>
 
 <p>To insert text content.</p>
 
@@ -175,8 +209,8 @@
 <pre><code>.get('text');
 </code></pre>
 
-<h3>
-<a name="html" class="anchor" href="#html"><span class="octicon octicon-link"></span></a>html</h3>
+<h5>
+<a name="html" class="anchor" href="#html"><span class="octicon octicon-link"></span></a>html</h5>
 
 <p>To set the raw inner HTML value of the element.</p>
 
@@ -188,8 +222,33 @@
 <pre><code>.get('html');
 </code></pre>
 
-<h3>
-<a name="add-custom-special-property" class="anchor" href="#add-custom-special-property"><span class="octicon octicon-link"></span></a>Add custom special property</h3>
+<h5>
+<a name="getouterhtml" class="anchor" href="#getouterhtml"><span class="octicon octicon-link"></span></a>.get('outerHTML')</h5>
+
+<p>Get the outerHTML of an element.</p>
+
+<h5>
+<a name="gettag" class="anchor" href="#gettag"><span class="octicon octicon-link"></span></a>.get('tag')</h5>
+
+<p>Get the element tag in lower case.</p>
+
+<h4>
+<a name="getoffsetheight" class="anchor" href="#getoffsetheight"><span class="octicon octicon-link"></span></a>.get('offsetHeight')</h4>
+
+<p>Return the element's offset height.</p>
+
+<h4>
+<a name="getouterheight" class="anchor" href="#getouterheight"><span class="octicon octicon-link"></span></a>.get('outerHeight')</h4>
+
+<p>Return the element's offset height with top and bottom margins summed.</p>
+
+<h4>
+<a name="getouterwidth" class="anchor" href="#getouterwidth"><span class="octicon octicon-link"></span></a>.get('outerWidth')</h4>
+
+<p>Return the element's offset height with the left and right margins summed.</p>
+
+<h5>
+<a name="add-custom-special-property" class="anchor" href="#add-custom-special-property"><span class="octicon octicon-link"></span></a>Add custom special property</h5>
 
 <p>There is a special object <code>Q.properties</code> which is an object of special property keywords. The value of these is an object containing a <code>set</code> and <code>get</code> function. To add a custom special property.</p>
 
@@ -206,6 +265,203 @@
 </code></pre>
 
 <p>This is extremely extensible.</p>
+
+<h3>
+<a name="events" class="anchor" href="#events"><span class="octicon octicon-link"></span></a>Events</h3>
+
+<h4>
+<a name="onevent-callback" class="anchor" href="#onevent-callback"><span class="octicon octicon-link"></span></a>.on(event, callback)</h4>
+
+<p>Add an event listener.</p>
+
+<pre><code>.on('click', clickEventCallback);
+</code></pre>
+
+<p>Add multiple event listeners at once.</p>
+
+<pre><code>.on({
+    mousedown: function(){},
+    mouseup: function(){}
+});
+</code></pre>
+
+<h4>
+<a name="onceevent-callback" class="anchor" href="#onceevent-callback"><span class="octicon octicon-link"></span></a>.once(event, callback)</h4>
+
+<p>Add an event listener that is automatically removed after the first trigger.</p>
+
+<pre><code>.once('click', oneTimeOffer);
+</code></pre>
+
+<p>Add multiple event listeners that are automatically removed after the first trigger.</p>
+
+<pre><code>.once({
+    mousedown: onMouseDownCallback,
+    mouseup: onMouseUpCallback
+})
+</code></pre>
+
+<h4>
+<a name="offevent-callback" class="anchor" href="#offevent-callback"><span class="octicon octicon-link"></span></a>.off(event, callback)</h4>
+
+<p>Remove an event listener.</p>
+
+<pre><code>.off('click', clickEventCallback);
+</code></pre>
+
+<p>Remove multiple event listeners at once.</p>
+
+<pre><code>.off({
+    mousedown: onMouseDownCallback,
+    mouseup: onMouseUpCallback
+});
+</code></pre>
+
+<h4>
+<a name="special-events" class="anchor" href="#special-events"><span class="octicon octicon-link"></span></a>Special events</h4>
+
+<h5>
+<a name="ready" class="anchor" href="#ready"><span class="octicon octicon-link"></span></a>ready</h5>
+
+<p>A special <code>ready</code> event is an alias to <code>DOMContentLoaded</code>.</p>
+
+<h5>
+<a name="create-your-own-special-events" class="anchor" href="#create-your-own-special-events"><span class="octicon octicon-link"></span></a>Create your own 'special' events</h5>
+
+<p>Special events allow for events to be manipulated in various ways. TODO: document special event features.</p>
+
+<h3>
+<a name="dom-traversal" class="anchor" href="#dom-traversal"><span class="octicon octicon-link"></span></a>DOM Traversal</h3>
+
+<h4>
+<a name="findselector" class="anchor" href="#findselector"><span class="octicon octicon-link"></span></a>.find(selector)</h4>
+
+<p>Find a descending element that matches given selector. Returns either a single element or null.</p>
+
+<h4>
+<a name="searchselector" class="anchor" href="#searchselector"><span class="octicon octicon-link"></span></a>.search(selector)</h4>
+
+<p>Returns list of elements matching given selector. May return an empty list if no matching elements are found.</p>
+
+<h4>
+<a name="searchselector-foreach-filter" class="anchor" href="#searchselector-foreach-filter"><span class="octicon octicon-link"></span></a>.search(selector, forEach[, filter])</h4>
+
+<p>Perform a callback event, <code>forEach</code>, for each element matching the selector. An optional <code>filter</code> argument can be passed to further filter the elements prior to the <code>forEach</code> callback being triggered.</p>
+
+<h3>
+<a name="dom-insertions" class="anchor" href="#dom-insertions"><span class="octicon octicon-link"></span></a>DOM Insertions</h3>
+
+<h4>
+<a name="injectelement" class="anchor" href="#injectelement"><span class="octicon octicon-link"></span></a>.inject(element)</h4>
+
+<p>To append descendant elements as last child of parent.</p>
+
+<pre><code>.inject(document.createElement('div'));
+</code></pre>
+
+<p>This is equivalent to.</p>
+
+<pre><code>.inject('append', element);
+</code></pre>
+
+<p>Alias.</p>
+
+<pre><code>.append(element);
+</code></pre>
+
+<p>To append multiple descending elements.</p>
+
+<pre><code>.inject([Q(), Q(), Q()]); // with an array
+.inject([ [Q(), Q()], [Q()], Q() ]); // flattens array of arguments and injects them all
+.inject(Q(), Q(), Q()); // with arguments
+</code></pre>
+
+<h4>
+<a name="injectprepend-element" class="anchor" href="#injectprepend-element"><span class="octicon octicon-link"></span></a>.inject('prepend', element)</h4>
+
+<p>Prepend an element as the first child of parent.</p>
+
+<pre><code>.inject('prepend', document.createElement('div'));
+</code></pre>
+
+<p>Alias.</p>
+
+<pre><code>.prepend(document.createElement('div'));
+</code></pre>
+
+<h4>
+<a name="injectafter-element" class="anchor" href="#injectafter-element"><span class="octicon octicon-link"></span></a>.inject('after', element);</h4>
+
+<p>Inject context element after the passed element.</p>
+
+<pre><code>.inject('after', element);
+</code></pre>
+
+<p>Alias</p>
+
+<pre><code>.after(element);
+</code></pre>
+
+<h4>
+<a name="injectbefore-element" class="anchor" href="#injectbefore-element"><span class="octicon octicon-link"></span></a>.inject('before', element);</h4>
+
+<p>Inject context element before the given element.</p>
+
+<pre><code>.inject('before', element);
+</code></pre>
+
+<p>Alias</p>
+
+<pre><code>.before(element);
+</code></pre>
+
+<h3>
+<a name="element-utilities" class="anchor" href="#element-utilities"><span class="octicon octicon-link"></span></a>Element utilities</h3>
+
+<h4>
+<a name="matchesselector" class="anchor" href="#matchesselector"><span class="octicon octicon-link"></span></a>.matches(selector)</h4>
+
+<p>Returns a boolean to indicate whether the element matches the given selector.</p>
+
+<h4>
+<a name="clone" class="anchor" href="#clone"><span class="octicon octicon-link"></span></a>.clone()</h4>
+
+<p>Simple wrapper for <code>element.cloneNode(true);</code>. Returns a clone of the element.</p>
+
+<h4>
+<a name="containsothernode" class="anchor" href="#containsothernode"><span class="octicon octicon-link"></span></a>.contains(otherNode)</h4>
+
+<p>Returns a boolean to indicate if the given <code>otherNode</code> is a descendant of the context element. <a href="https://developer.mozilla.org/en-US/docs/Web/API/Node.contains">Read more on spec</a>.</p>
+
+<h4>
+<a name="offset" class="anchor" href="#offset"><span class="octicon octicon-link"></span></a>.offset()</h4>
+
+<p>Returns the element's offset position similar to jQuery's <a href="http://api.jquery.com/offset/">.offset</a> as an object similar to <code>{ left: 0, top: 0 }</code>.</p>
+
+<h4>
+<a name="position" class="anchor" href="#position"><span class="octicon octicon-link"></span></a>.position()</h4>
+
+<p>Returns the element's offset location as an object similar to <code>{ left: 0, top: 0 }</code>. Similar to jQuery's <a href="http://api.jquery.com/position/">.position</a>.</p>
+
+<h4>
+<a name="siblings" class="anchor" href="#siblings"><span class="octicon octicon-link"></span></a>.siblings()</h4>
+
+<p>Returns an array of the element's siblings.</p>
+
+<h2>
+<a name="special-methods" class="anchor" href="#special-methods"><span class="octicon octicon-link"></span></a>Special Methods</h2>
+
+<p>To add custom methods to each Q return element, there is a utility similar to jQuery's <code>$.fn</code>.</p>
+
+<pre><code>Q.fn.method = function () {
+    // this will be a single element
+};
+</code></pre>
+
+<p>Now to call your method, simply:</p>
+
+<pre><code>.method();
+</code></pre>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/benhutchins">benhutchins</a></p>
