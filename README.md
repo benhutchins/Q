@@ -255,57 +255,45 @@ Perform a callback event, `forEach`, for each element matching the selector. An 
 
 ### DOM Insertions
 
-#### .inject(element)
+#### .append(element)
 
 To append descendant elements as last child of parent.
 
-	.inject(document.createElement('div'));
+	.append(document.createElement('div'));
 
 This is equivalent to.
 
-	.inject('append', element);
-
-Alias.
-
-	.append(element);
+	.append('append', element);
 
 To append multiple descending elements.
 
-	.inject([Q(), Q(), Q()]); // with an array
-	.inject([ [Q(), Q()], [Q()], Q() ]); // flattens array of arguments and injects them all
-	.inject(Q(), Q(), Q()); // with arguments
+	.append([Q(), Q(), Q()]); // with an array
+	.append([ [Q(), Q()], [Q()], Q() ]); // flattens array of arguments and appends them all
+	.append(Q(), Q(), Q()); // with arguments
 
-#### .inject('prepend', element)
+#### .prepend(element)
 
 Prepend an element as the first child of parent.
 
-	.inject('prepend', document.createElement('div'));
-
-Alias.
-
 	.prepend(document.createElement('div'));
 
-#### .inject('after', element);
+#### .after(element);
 
 Inject context element after the passed element.
 
-	.inject('after', element);
+	.inject(element);
 
-Alias
-
-	.after(element);
-
-#### .inject('before', element);
+#### .before(element);
 
 Inject context element before the given element.
-
-	.inject('before', element);
-
-Alias
 
 	.before(element);
 
 ### Element utilities
+
+#### .destroy()
+
+Destroy this element, removing it from the DOM.
 
 #### .matches(selector)
 

@@ -167,10 +167,14 @@ var Q = (function (undefined) {
 		return _classes;
 	}
 
-	// add class to element
+	// add class to the element
 	Q.fn.addClass = function () {
 		classForEach(arguments).forEach(function (klass) {
-			this.classList.add(klass);
+			if (this.classList) {
+				this.classList.add(klass); // IE10+
+			} else {
+				this.className += ' ' + klass; // legacy browsers
+			}
 		}.bind(this));
 		return this;
 	};
@@ -178,21 +182,38 @@ var Q = (function (undefined) {
 	// returns a boolean whether the element has a given
 	Q.fn.hasClass = function () {
 		return classForEach(arguments).every(function (klass) {
-			return this.classList.contains(klass);
+			if (this.classList) {
+				return this.classList.contains(klass); // IE10+
+			} else {
+				return new RegExp('(^| )' + klass + '( |$)', 'gi').test(this.className); // legacy browsers
+			}
 		}.bind(this));
 	};
 
-	// remove class from element
+	// remove a class from the element
 	Q.fn.removeClass = function () {
 		classForEach(arguments).forEach(function (klass) {
-			this.classList.remove(klass);
+			if (this.classList) {
+				this.classList.remove(klass); // IE10+
+			} else {
+				this.className = el.className.replace(new RegExp('(^|\\b)' + klass + '(\\b|$)', 'gi'), ' '); // legacy browsers
+			}
 		}.bind(this));
 		return this;
 	};
 
+	// toggle a class on the element
 	Q.fn.toggleClass = function () {
 		classForEach(arguments).forEach(function (klass) {
-			this.classList.toggle(klass);
+			// IE10+ supports classList
+			// otherwise we have to use our own wrappers for support
+			if (this.classList) {
+				this.classList.toggle(klass);
+			} else if (this.hasClass(klass)) {
+				this.removeClass(klass);
+			} else {
+				this.addClass(klass);
+			}
 		}.bind(this));
 		return this;
 	};
@@ -202,6 +223,8 @@ var Q = (function (undefined) {
 		return forEach(arguments, function (property, value) {
 			if (Q.properties[property] && Q.properties[property].set) {
 				Q.properties[property].set.call(this, value);
+			} else if (value === null) {
+				this.removeAttribute(property);
 			} else {
 				this.setAttribute(property, value);
 			}
@@ -215,6 +238,15 @@ var Q = (function (undefined) {
 		} else {
 			return this.getAttribute(property);
 		}
+	};
+
+	// Unset attributes
+	Q.fn.unset = function (property) {
+		var properties = [].concat.apply([], arguments);
+		for (var i = 0, l = properties.length; i < l; i++) {
+			this.removeAttribute(properties[i]);
+		}
+		return this;
 	};
 
 	// Attach an event listener.
@@ -235,17 +267,33 @@ var Q = (function (undefined) {
 				}
 			}
 
-			// if we only want to listen to this callback once
-			if (once) {
-				var originalCallback = callback;
-				callback = function () {
+			var element = this;
+
+			function listener(event) {
+				// grab the window.event, <= IE8 needs this
+				event = Q.fixEvent(event || window.event);
+
+				// if we only want to listen to this callback once
+				if (once) {
 					this.off(eventType, callback);
-					originalCallback.apply(this, arguments);
-				};
-				originalCallback._QEvent = callback;
+				}
+
+				// trigger the user method
+				return callback.call(element, event);
 			}
 
-			this.addEventListener(eventType, callback, false);
+			// attach the listener to the function
+			// TODO: this is not a perfect solution, if you double
+			// bind the function or bind it two different events
+			// it won't properly unbind when you want it to
+			callback._QEvent = listener;
+
+			// attach our event wrapper function
+			if (this.addEventListener) {
+				this.addEventListener(eventType, listener, false);
+			} else {
+				this.attachEvent('on' + eventType, listener);
+			}
 		}, this);
 	};
 
@@ -273,7 +321,11 @@ var Q = (function (undefined) {
 				callback = callback._QEvent;
 			}
 
-			this.removeEventListener(eventType, callback, false);
+			if (this.removeEventListener) {
+				this.removeEventListener(eventType, callback, false);
+			} else {
+				this.detachEvent('on' + eventType, callback);
+			}
 		}, this);
 	};
 
@@ -313,6 +365,7 @@ var Q = (function (undefined) {
 		before: function (parent, child) { parent.insertAdjacentHTML('beforebegin', child); }
 	};
 
+	// inject utility, probably a poor name choice, will remove?
 	Q.inject = function () {
 		var children = [].concat.apply([], arguments);
 		var position = 'append';
@@ -322,7 +375,7 @@ var Q = (function (undefined) {
 		}
 
 		if (injectPositions[position]) {
-			for (var i = 0; i < children.length; i++) {
+			for (var i = 0, l = children.length; i < l; i++) {
 				injectPositions[position](this, children[i]);
 			}
 		} else {
@@ -334,21 +387,33 @@ var Q = (function (undefined) {
 	Q.forEach(injectPositions, function (position, injector) {
 		Q.fn[position] = function () {
 			var children = [].concat.apply([], arguments);
-			for (var i = 0; i < children.length; i++) {
+			for (var i = 0, l = children.length; i < l; i++) {
 				injector(this, children[i]);
 			}
 			return this;
 		};
 	});
 
-	// remove context element
-	Q.fn.remove = function () {
+	// remove context element from DOM.
+	Q.fn.destroy = function () {
 		this.parentNode.removeChild(this);
 	};
 
 	// returns whether the element matches the selector
 	Q.fn.matches = function (selector) {
-		return (this.matches || this.matchesSelector || this.msMatchesSelector || this.mozMatchesSelector || this.webkitMatchesSelector || this.oMatchesSelector).call(this, selector);
+		var matches = (this.matches || this.matchesSelector || this.msMatchesSelector || this.mozMatchesSelector || this.webkitMatchesSelector || this.oMatchesSelector);
+		if (matches) {
+			matches.call(this, selector);
+		} else {
+			// <= IE8 support
+			var nodes = this.parentNode.querySelectorAll(selector);
+			for (var i = 0, l = nodes.length; i < l; i++) {
+				if (nodes[i] === this) {
+					return true;
+				}
+			}
+			return false;
+		}
 	};
 
 	// utility to get element offset similar to jQuery's
@@ -452,6 +517,11 @@ var Q = (function (undefined) {
 		var tmp = document.implementation.createHTMLDocument();
 		tmp.body.innerHTML = str;
 		return tmp.body.children;
+	};
+
+	// TODO: semi-standardize event object
+	Q.fixEvent = function (event) {
+		return event;
 	};
 
 	return Q;

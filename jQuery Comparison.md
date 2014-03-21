@@ -80,7 +80,7 @@ For true CSS effects, consider using [animate.css](http://daneden.github.io/anim
 ### Add class
 
 	// jQuery
-	$(el).addClsas(class);
+	$(el).addClass(class);
 
 	// Q
 	Q(el).addClass(class);
@@ -129,7 +129,7 @@ For true CSS effects, consider using [animate.css](http://daneden.github.io/anim
 	$(parent).append(child);
 
 	// Q
-	Q(parent).inject(child);
+	Q(parent).append(child);
 
 	// plain JavaScript
 	parent.appendChild(child);
@@ -140,7 +140,7 @@ For true CSS effects, consider using [animate.css](http://daneden.github.io/anim
 	$(parent).prepend(el);
 
 	// Q
-	Q(parent).inject('prepend', el);
+	Q(parent).prepend(el);
 
 	// plain JavaScript
 	parent.insertBefore(el, parent.firstChild);
@@ -151,7 +151,7 @@ For true CSS effects, consider using [animate.css](http://daneden.github.io/anim
 	$(el).after(context);
 
 	// Q
-	$(el).inject('after', context);
+	Q(el).after(context);
 
 	// plain JavaScript
 	parent.insertAdjacentHTML('afterend', context);
@@ -162,7 +162,7 @@ For true CSS effects, consider using [animate.css](http://daneden.github.io/anim
 	$(el).before(context);
 
 	// Q
-	$(el).inject('before', context);
+	Q(el).before(context);
 
 	// plain JavaScript
 	el.insertAdjacentHTML('beforebegin', context);
