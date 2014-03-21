@@ -199,7 +199,7 @@ For true CSS effects, consider using [animate.css](http://daneden.github.io/anim
 	$(el).find(selector).length;
 
 	// Q
-	Q(el).find(selector).length;
+	Q(el).search(selector).length;
 
 	// plain JavaScript
 	el.querySelector(selector) !== null;
